@@ -8,7 +8,7 @@ const authMiddleware = require("./middlewares/auth-middleware")
 
 mongoose.connect("mongodb://localhost:27017/response2019", {
   ignoreUndefined: true ,
-});
+}); // mongodb 연결
 
 
 
