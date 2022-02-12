@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken")
 
 
 router.get("/articles", (req, res) => {
-	res.send("This is articles page")
+    res.send("This is articles page")
 })
 
 
