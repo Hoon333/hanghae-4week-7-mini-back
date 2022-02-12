@@ -1,22 +1,19 @@
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 dotenv.config();
 
-const express = require("express")
-const router = express.Router()
-const Article = require("../schemas/article")
-const Comment = require("../schemas/comment")
-const User = require("../schemas/user")
-const authMiddleware = require("../middlewares/auth-middleware")
-const jwt = require("jsonwebtoken")
-const path = require('path');
-const AWS = require('aws-sdk')
-const multerS3 = require('multer-s3')
+const express = require("express");
+const router = express.Router();
+const Article = require("../schemas/article");
+const Comment = require("../schemas/comment");
+const User = require("../schemas/user");
+const authMiddleware = require("../middlewares/auth-middleware");
+const jwt = require("jsonwebtoken");
+const path = require("path");
+const AWS = require("aws-sdk");
+const multerS3 = require("multer-s3");
 
-
-
-
-const multer = require('multer');
-const fs = require('fs');
+const multer = require("multer");
+const fs = require("fs");
 
 try {
     fs.readdirSync('uploads');
@@ -24,7 +21,6 @@ try {
     console.error('uploads 폴더가 없어 uploads 폴더를 생성합니다.');
     fs.mkdirSync('uploads');
 }
-
 
 AWS.config.update({
     accessKeyId: process.env.S3_ACCESS_KEY_ID,
@@ -43,11 +39,10 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-
 router.get("/articles", async (req, res) => {
-    const articles = await Article.find({})
-    res.json({ result: "success", articles })
-})
+  const articles = await Article.find({});
+  res.json({ result: "success", articles });
+});
 
 
 router.get("/articles/:articleId", async (req, res) => {
@@ -99,10 +94,6 @@ router.post("/articles", upload.single('image'), async (req, res) => {
 })
 
 
-
-
-
-
 // router.get("/articles", async(req,res)=>{
 //     const existArticles = await Articles.find()
 //     const articles = existArticles.sort((a,b)=>b.date-a.date)
@@ -135,8 +126,6 @@ router.post("/articles", upload.single('image'), async (req, res) => {
 //     res.render("reform",{articles})
 // })
 
-
-
 // router.post("/articles", authMiddleware, async(req,res)=>{
 //     const {user} = res.locals
 //     const {title, content} = req.body
@@ -158,8 +147,7 @@ router.post("/articles", upload.single('image'), async (req, res) => {
 //     res.json({ result : "작성완료" })
 // })
 
-
-// //댓글작성 API 
+// //댓글작성 API
 // router.post("/articles/:articleId/comment",authMiddleware,async(req,res)=>{
 //     const {content} =req.body
 //     const {articleId} = req.params
@@ -190,21 +178,17 @@ router.post("/articles", upload.single('image'), async (req, res) => {
 //     if(like==="false"){
 //         await Like.deleteOne({nickname,articleId})
 //         res.send({result:'좋아요 취소'})
-//     } 
+//     }
 //     if(like==="true"){
 //         const newLike = new Like({nickname,articleId})
 //         await newLike.save()
 //         res.send({result:'좋아요 완료'})
 //     }
-
 // })
 
 
 
-
-
-
-
+// })
 // router.put("/articles/:articleId", authMiddleware, async(req,res)=>{
 //     console.log('수정 요청 받았습니다.')
 //     const {nickname} = res.locals.user
@@ -216,13 +200,12 @@ router.post("/articles", upload.single('image'), async (req, res) => {
 //         res.status(400).send({
 //             errorMessage: "자기글만 수정할 수 있습니다."
 //         })
-//         return  
+//         return
 //     }
 //     const date = new Date()
 //     await Articles.updateOne({articleId:Number(articleId)},{$set:{title,content,date}})
 //     res.send({result:'수정완료'})
 // })
-
 
 // router.put("/comment/:commentId", authMiddleware, async(req,res)=>{
 //     const {nickname} = res.locals.user
@@ -245,12 +228,6 @@ router.post("/articles", upload.single('image'), async (req, res) => {
 //     res.send({result:'삭제완료'})
 // })
 
-
-
-
-
-
-
 // router.delete("/articles/:articleId", authMiddleware, async(req,res)=>{
 //     const {nickname} = res.locals.user
 //     const {articleId} = req.params
@@ -260,17 +237,10 @@ router.post("/articles", upload.single('image'), async (req, res) => {
 //         res.status(400).send({
 //             errorMessage: "자기글만 삭제할 수 있습니다."
 //         })
-//         return  
+//         return
 //     }
 //     await Articles.deleteOne({articleId})
 //     res.json({result:'삭제완료'})
 // })
 
-
-
-
-
-
-
-
-module.exports = router
+module.exports = router;

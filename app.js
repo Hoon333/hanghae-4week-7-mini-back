@@ -1,11 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const loginRouter = require("./routes/login")
-const articleRouter = require("./routes/articles")
-const commentRouter = require("./routes/comments")
+const loginRouter = require("./routes/login");
+const articleRouter = require("./routes/articles");
+const commentRouter = require("./routes/comments");
 const cors = require("cors");
-const path = require("path")
-const authMiddleware = require("./middlewares/auth-middleware")
+const path = require("path");
+const authMiddleware = require("./middlewares/auth-middleware");
 
 // mongoose.connect("mongodb://localhost:27017/response2019", {
 //   ignoreUndefined: true ,
@@ -16,9 +16,8 @@ mongoose.connect("mongodb://localhost/response2009", {   // 1-6 몽고 DB연결�
     ignoreUndefined: true,
 });
 
-
-const db = mongoose.connection;  // 1-6 몽고 DB연결과정
-db.on("error", console.error.bind(console, "connection error:"));  // 1-6 몽고 DB연결과정
+const db = mongoose.connection; // 1-6 몽고 DB연결과정
+db.on("error", console.error.bind(console, "connection error:")); // 1-6 몽고 DB연결과정
 
 const app = express();
 

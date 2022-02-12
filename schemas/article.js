@@ -1,5 +1,5 @@
-const mongoose = require("mongoose")
-const moment = require('moment')
+const mongoose = require("mongoose");
+const moment = require("moment");
 
 const articleSchema = new mongoose.Schema({
     title: {

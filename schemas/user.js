@@ -21,7 +21,6 @@ UserSchema.set("toJSON", {
     virtuals: true,
 });
 
-
 // 사전 hook , save 시 password 암호화 해서 저장
 UserSchema.pre("save", function (next) {
     let user = this;
