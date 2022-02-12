@@ -44,18 +44,62 @@ const upload = multer({
 });
 
 
-router.get("/articles", (req,res)=>{
-    res.send("This is articles page")
+router.get("/articles", async(req,res)=>{
+    const articles = await Article.find({})
+    res.json({result:"success",articles})
+})
+
+
+router.get("/articles/:articleId", async(req,res)=>{
+    const {articleId} = req.params
+    const article = await Article.findOne({_id:articleId})
+    res.json({result:"success",article:[article]})
+})
+
+router.put("/articles/:articleId",async(req,res)=>{
+    console.log('수정요청 들어왔어')
+    const {articleId} = req.params
+    const {title,content,year} = req.body
+    console.log(title,content,year)
+    //authmiddleware 작업 끝나면 자기글만 수정가능하도록 변경 예정
+    const existArticle = await Article.find({_id:articleId})
+    console.log(existArticle)
+    if(existArticle.length){
+        await Article.updateOne({ _id : articleId },{ $set : {title,content,year} } )
+    }
+    res.json({result:'success',msg:'수정되었습니다.'})
 })
 
 
 
 
-router.post("/articles",upload.single('image'),(req,res)=>{
-    console.log(req.file);
-    console.log(req.body);
-    res.send("파일 잘 받았습니다.")
+
+router.delete("/articles/:articleId",async(req,res)=>{
+    console.log('삭제요청 들어왔어')
+    const {articleId} = req.params
+    console.log(articleId)
+    //authmiddleware 작업 끝나면 자기글만 삭제가능하도록 변경 예정 작업3
+    const existArticle = await Article.find({_id:articleId})
+    if(existArticle.length){
+        await Article.deleteOne({_id:articleId})
+    }
+    res.json({result:'success',msg:'삭제되었습니다.'})
 })
+
+
+
+
+router.post("/articles",upload.single('image'),async(req,res)=>{
+    //const user_id = "미들웨어에서 가져올 예정" 로그인 기능완료 후 구현예정 
+    const {user_id, title, content, year} = req.body //여기서 user_id 지우고 res.locals에서 user_id 가져올 예정
+    const image = req.file.location
+    const date = new Date()
+    const createdArticle = await Article.create({user_id,title,content,year:Number(year), image, date})
+    res.json({ result : "success", msg:'작성 완료 되었습니다.'})
+})
+
+
+
 
 
 
