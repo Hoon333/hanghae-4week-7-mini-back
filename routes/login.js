@@ -1,23 +1,17 @@
-const express = require("express")
-const router = express.Router()
-const User = require("../schemas/user")
-const Joi = require("joi")
-const jwt = require("jsonwebtoken")
-const authMiddleware = require("../middlewares/auth-middleware")
+const express = require("express");
+const router = express.Router();
+const User = require("../schemas/user");
+const Joi = require("joi");
+const jwt = require("jsonwebtoken");
+const authMiddleware = require("../middlewares/auth-middleware");
 
+router.get("/", (req, res) => {
+  res.send("This is api page");
+});
 
-router.get("/", (req,res)=>{
-    res.send("This is api page")
-})
-
-router.get("/login", (req,res)=>{
-    res.send("This is login page")
-})
-
-
-
-
-
+router.get("/login", (req, res) => {
+  res.send("This is login page");
+});
 
 // nickname, password 검증 스키마(joi 활용)
 // const postUsersSchema = Joi.object({
@@ -42,7 +36,7 @@ router.get("/login", (req,res)=>{
 //             })
 //             return
 //         }
-    
+
 //         const existUsers = await User.find({nickname})
 //         if(existUsers.length){
 //             res.status(400).send({
@@ -50,11 +44,11 @@ router.get("/login", (req,res)=>{
 //             })
 //             return
 //         }
-    
+
 //         const user = new User({nickname , password})
 //         await user.save()
-    
-//         res.send({}) 
+
+//         res.send({})
 
 //     }catch(err){
 //         console.log(err)
@@ -64,14 +58,12 @@ router.get("/login", (req,res)=>{
 //         return
 //     }
 
-
-   
 // })
 
 // // 로그인 API 작성
 
 // router.post("/auth",async(req,res)=>{
-    
+
 //     const {nickname,password} = req.body
 
 //     const user = await User.findOne({nickname,password})
@@ -116,11 +108,7 @@ router.get("/login", (req,res)=>{
 //             errorMessage: '잘못된 접근입니다.'
 //         })
 //     }
-    
+
 // })
 
-
-
-
-
-module.exports = router
+module.exports = router;
