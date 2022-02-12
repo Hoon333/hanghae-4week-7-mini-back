@@ -12,12 +12,14 @@ const UserSchema = new mongoose.Schema({
     },
 });
 
+// 버츄얼 필드
 UserSchema.virtual("userId").get(function () {
     return this._id.toHexString();
 });
 UserSchema.set("toJSON", {
     virtuals: true,
 });
+
 
 // 사전 hook , user. save 시 password 암호화 해서 저장
 UserSchema.pre("save", function (next) {
