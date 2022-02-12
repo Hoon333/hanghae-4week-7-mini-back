@@ -7,7 +7,7 @@ const authMiddleware = require("../middlewares/auth-middleware");
 const jwt = require("jsonwebtoken");
 
 router.get("/comment", (req, res) => {
-  res.send("This is comment page");
-});
+    res.send("This is comment page")
+})
 
 module.exports = router;
