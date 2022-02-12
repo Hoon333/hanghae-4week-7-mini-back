@@ -1,3 +1,6 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 const express = require("express")
 const router = express.Router()
 const Article = require("../schemas/article")
@@ -5,12 +8,54 @@ const Comment = require("../schemas/comment")
 const User = require("../schemas/user")
 const authMiddleware = require("../middlewares/auth-middleware")
 const jwt = require("jsonwebtoken")
+const path = require('path');
+const AWS = require('aws-sdk')
+const multerS3 = require('multer-s3')
+
+
+
+
+const multer = require('multer');
+const fs = require('fs');
+
+try {
+  fs.readdirSync('uploads');
+} catch (error) {
+  console.error('uploads 폴더가 없어 uploads 폴더를 생성합니다.');
+  fs.mkdirSync('uploads');
+}
+
+
+AWS.config.update({
+  accessKeyId:process.env.S3_ACCESS_KEY_ID,
+  secretAccessKey:process.env.S3_SECRET_ACCESS_KEY,
+  region: "ap-northeast-2" 
+})
+
+const upload = multer({
+  storage: multerS3({
+    s3: new AWS.S3(),
+    bucket: 'rednada1708',
+    key(req,file,cb){
+      cb(null,`orginal/${Date.now()}${path.basename(file.originalname)}`)
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 },
+});
 
 
 router.get("/articles", (req,res)=>{
     res.send("This is articles page")
 })
 
+
+
+
+router.post("/articles",upload.single('image'),(req,res)=>{
+    console.log(req.file);
+    console.log(req.body);
+    res.send("파일 잘 받았습니다.")
+})
 
 
 
