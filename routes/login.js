@@ -1,124 +1,72 @@
-const express = require("express")
-const router = express.Router()
-const User = require("../schemas/user")
-const Joi = require("joi")
-const jwt = require("jsonwebtoken")
+const express = require("express");
+const jwt = require("jsonwebtoken");
+const router = express.Router();
+const User = require("../schemas/user");
+const Joi = require("joi");
 const authMiddleware = require("../middlewares/auth-middleware")
 
 
-router.get("/", (req,res)=>{
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+
+
+router.get("/", (req, res) => {
     res.send("This is api page")
 })
 
-router.get("/login", (req,res)=>{
-    res.send("This is login page")
-})
 
+// 회원가입 API
+// register -> users 로 바꾸고 싶음
 
+router.post("/register", async (req, res) => {
+    const { user_id, password } = req.body;
 
+    // if (password !== confirmPassword) {
+    //     res.status(400).send({
+    //         errorMessage: "패스워드가 패스워드 확인란과 다릅니다.",
+    //     });
+    //     return;
+    // }
 
+    const user = new User({ user_id, password });
+    await user.save();
 
+    res.status(201).send({ result: 'success', msg: '회원가입에 성공하였습니다.' });
+});
 
-// nickname, password 검증 스키마(joi 활용)
-// const postUsersSchema = Joi.object({
-//     nickname: Joi.string().min(3).pattern(new RegExp('[a-zA-Z0-9]')).required(),
-//     password: Joi.string().min(4).required(),
-//     confirmPassword:Joi.string().min(4).required()
-// })
+// ID 중복 확인 API
+router.get("/users/:user_id", (req, res) => {
+    const { user_id } = req.params;
 
-// // 회원가입 API 완성
-// router.post("/users", async(req,res)=>{
-//     try{
-//         const {nickname, password,confirmPassword} = await postUsersSchema.validateAsync(req.body)
+    const existsUsers = await User.findOne({ user_id });
+    if (existsUsers) {
+        // NOTE: 보안을 위해 인증 메세지는 자세히 설명하지 않는것을 원칙으로 한다: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#authentication-responses
+        res.status(400).send({
+            errorMessage: "ID가 이미 사용중입니다.",
+        });
+        return;
+    }
+});
 
-//         if(password !== confirmPassword){
-//             res.status(400).send({
-//                 errorMessage: "비밀번호와 비밀번호확인이 일치하지 않습니다."
-//             })
-//             return
-//         } else if(password.includes(nickname)){
-//             res.status(400).send({
-//                 errorMessage: "비밀번호에 닉네임과 같은 값을 포함할 수 없습니다."
-//             })
-//             return
-//         }
-    
-//         const existUsers = await User.find({nickname})
-//         if(existUsers.length){
-//             res.status(400).send({
-//                 errorMessage: "중복된 닉네임입니다."
-//             })
-//             return
-//         }
-    
-//         const user = new User({nickname , password})
-//         await user.save()
-    
-//         res.send({}) 
+// 로그인 API
 
-//     }catch(err){
-//         console.log(err)
-//         res.status(400).send({
-//             errorMessage: err.message
-//         })
-//         return
-//     }
+router.post("/auth", async (req, res) => {
+    const { user_id, password } = req.body;
 
+    const user = await User.findOne({ user_id });
 
-   
-// })
+    // NOTE: 인증 메세지는 자세히 설명하지 않는것을 원칙으로 한다: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#authentication-responses
+    if (!user || password !== user.password) {
+        res.status(400).send({
+            errorMessage: "닉네임 또는 패스워드가 틀렸습니다.",
+        });
+        return;
+    }
 
-// // 로그인 API 작성
-
-// router.post("/auth",async(req,res)=>{
-    
-//     const {nickname,password} = req.body
-
-//     const user = await User.findOne({nickname,password})
-
-//     if(!user){
-//         res.status(401).send({
-//             errorMessage: "nickname 또는 password가 일치하지 않습니다."
-//         })
-//         return
-//     }
-
-//     const token = jwt.sign({userId:user.userId},"my-secret-key")
-//     res.send({token})
-
-// })
-
-// // 로그인 확인 API 작성
-
-// router.get("/users/me", authMiddleware, async(req,res)=>{
-//     console.log(res.locals.user.userId)
-//     const {user} = res.locals
-//     res.send({
-//         user:{
-//             userId:user.userId
-//         }
-//     })
-// })
-
-// router.get("/users/find", async(req,res)=>{
-//     const {authorization} = req.headers
-//     const [tokenType,tokenValue] = authorization.split(' ')
-//     try {
-//         const {userId} = jwt.verify(tokenValue,"my-secret-key")
-//         console.log(userId)
-//         const user = await User.findById(userId)
-//         res.send({
-//             nickname: user.nickname
-//         })
-
-//     } catch (error) {
-//         res.send({
-//             errorMessage: '잘못된 접근입니다.'
-//         })
-//     }
-    
-// })
-
+    res.send({
+        token: jwt.sign({ userId: user.userId }, "my-cafe-secret-key"),
+    });
+});
 
 
 
