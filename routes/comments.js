@@ -6,7 +6,7 @@ const Comment = require("../schemas/comment")
 const authMiddleware = require("../middlewares/auth-middleware")
 const jwt = require("jsonwebtoken")
 
-router.get("/comment", (req,res)=>{
+router.get("/comment", (req, res) => {
     res.send("This is comment page")
 })
 

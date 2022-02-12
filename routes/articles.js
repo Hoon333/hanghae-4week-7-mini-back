@@ -7,8 +7,8 @@ const authMiddleware = require("../middlewares/auth-middleware")
 const jwt = require("jsonwebtoken")
 
 
-router.get("/articles", (req,res)=>{
-    res.send("This is articles page")
+router.get("/articles", (req, res) => {
+	res.send("This is articles page")
 })
 
 
@@ -57,7 +57,7 @@ router.get("/articles", (req,res)=>{
 
 //     console.log(user, title,content)
 //     const date = new Date()
-    
+
 //     const articles = await Articles.find()
 //     const ids = articles.map((item)=>item.articleId)
 //     let articleId = 1
@@ -107,7 +107,7 @@ router.get("/articles", (req,res)=>{
 //         await newLike.save()
 //         res.send({result:'좋아요 완료'})
 //     }
-    
+
 // })
 
 
