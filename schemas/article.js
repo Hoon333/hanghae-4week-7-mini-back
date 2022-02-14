@@ -23,9 +23,8 @@ const articleSchema = new mongoose.Schema({
         required: true
     },
     date: {
-        type: Date,
-        default: moment().format("YYYY-MM-DD hh:mm"),
-        required: true
+        type: String,
+        default: moment().format("YYYY-MM-DD HH:mm"),
     }
 })
 
@@ -35,6 +34,5 @@ articleSchema.virtual("articleId").get(function () {
 articleSchema.set("toJSON", {
     virtuals: true,
 });
-
 
 module.exports = mongoose.model("Articles", articleSchema)
