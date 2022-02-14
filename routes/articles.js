@@ -50,7 +50,8 @@ const upload = multer({
 
 // 전체 게시글 조회 API 통과
 router.get("/articles", async (req, res) => {
-  const articles = await Article.find({});
+  const existArticles = await Article.find({});
+  const articles = existArticles.sort((a,b)=>(b.date-a.date))
   res.json({ result: "success", articles });
 });
 
@@ -61,7 +62,7 @@ router.get("/articles/:articleId", async (req, res) => {
   res.json({ result: "success", article: [article] });
 });
 
-// 게시글 수정 API 통과
+// 게시글 수정 API 통과 // req.files.length =>   url 삭제, url 등록, 수정 ?     
 router.put("/articles/:articleId", authMiddleware, async (req, res) => {
   console.log("수정요청 들어왔어");
   const {user_id} = res.locals.user
@@ -117,33 +118,44 @@ router.delete("/articles/:articleId", authMiddleware,async (req, res) => {
 
 
 // S3에 이미지 등록 api 통과
-router.post("/image", upload.array("image",5), (req, res) => {
+router.post("/image", upload.array("image",1), (req, res) => {
+  // try{
+
+
+  // } catch(err){
+  //   res.status(400).json({ result : "fail" , msg : '파일 개수가 맞지 않습니다.'})
+  // }
   console.log(req.files)
-  const image = req.files.map((item)=> (item.location))
-  console.log(image)
-  res.json({ result: "success", msg: "파일 업로드가 완료되었습니다.", url: url});
+  if(req.files.length){
+    const image = req.files[0].location
+    console.log(image)
+    res.json({ result: "success", msg: "파일 업로드가 완료되었습니다.", url: image});
+  } else{
+    console.log('바뀐 파일이 없습니다.')
+    res.json({ result: "success", msg: "바뀐 파일이 없습니다."});
+  }
 });
 
 //s3의 이미지 삭제 api 통과
-router.delete("/image/:articleId", authMiddleware, async(req, res) => {
-  const {user_id} = res.locals.user
-  const {image} = req.body
-  console.log(image)
-  const { articleId } = req.params;
-  const existArticle = await Article.findOne({ _id: articleId });
-  if(existArticle && (existArticle.user_id === user_id)){
-    const key = "original/" + decodeURI(image.split("/").slice(-1))
-    let s3 = new AWS.S3()
-    s3.deleteObject({
-        Bucket: 'rednada1708', // 사용자 버켓 이름
-        Key: key // 버켓 내 경로
-      }, (err, data) => {
-        if (err) { throw err; }
-        console.log('s3 deleteObject 삭제완료' )
-    })
-  }
-  res.json({ result: "success", msg: "파일 삭제가 완료되었습니다."});
-});
+// router.delete("/image/:articleId", authMiddleware, async(req, res) => {
+//   const {user_id} = res.locals.user
+//   const {image} = req.body
+//   console.log(image)
+//   const { articleId } = req.params;
+//   const existArticle = await Article.findOne({ _id: articleId });
+//   if(existArticle && (existArticle.user_id === user_id)){
+//     const key = "original/" + decodeURI(image.split("/").slice(-1))
+//     let s3 = new AWS.S3()
+//     s3.deleteObject({
+//         Bucket: 'rednada1708', // 사용자 버켓 이름
+//         Key: key // 버켓 내 경로
+//       }, (err, data) => {
+//         if (err) { throw err; }
+//         console.log('s3 deleteObject 삭제완료' )
+//     })
+//   }
+//   res.json({ result: "success", msg: "파일 삭제가 완료되었습니다."});
+// });
 
 
 
@@ -168,7 +180,6 @@ router.post("/articles", upload.single("image"), async (req, res) => {
   } catch(err){
     res.status(400).json({ result : "fail" , msg : '파일이 없습니다.'})
   }
-
 });
 
 module.exports = router;

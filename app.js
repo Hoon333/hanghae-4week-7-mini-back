@@ -10,7 +10,7 @@ const authMiddleware = require("./middlewares/auth-middleware");
 // mongoose.connect("mongodb://localhost:27017/response2019", {
 //   ignoreUndefined: true ,
 // }); // mongodb 연결
-mongoose.connect("mongodb://localhost/response2009", {   // 1-6 몽고 DB연결과정 localhost의 todo-demo에 연결하겠다.
+mongoose.connect("mongodb://localhost/responseMZ", {   // 1-6 몽고 DB연결과정 localhost의 todo-demo에 연결하겠다.
     useNewUrlParser: true,  // 1-6 몽고 DB연결과정
     useUnifiedTopology: true,  // 1-6 몽고 DB연결과정
     ignoreUndefined: true,

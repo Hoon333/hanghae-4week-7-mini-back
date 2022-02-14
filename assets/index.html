@@ -15,14 +15,17 @@
     <input type="text" name="year" placeholder="year">
     <!-- <input type="file" name="image2" />
     <input type="text" name="title" /> -->
-    <button type="submit">업로드</button>
+    <button type="submit">단일 파일 업로드</button>
   </form>
 
-  <form id="form2" action="/api/image" method="post" enctype="multipart/form-data">
+  <form id="form2" action="/api/image" method="put" enctype="multipart/form-data">
     <input type="file" name="image" multiple />
-    <button type="submit">이미지만 업로드</button>
+    <input type="text" name="title" placeholder="title">
+    <input type="text" name="content" placeholder="content">
+    <input type="text" name="year" placeholder="year">
+    <input type="text" name="image" placeholder="imageURL">
+    <button type="submit">수정 연습</button>
   </form>
-
 
 
   <img src="https://rednada1708.s3.ap-northeast-2.amazonaws.com/original/1644771475237%EB%B0%95%EC%B9%98%EA%B8%B0.jfif">
