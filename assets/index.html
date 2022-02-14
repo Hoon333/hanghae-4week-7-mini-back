@@ -17,16 +17,30 @@
     <input type="text" name="title" /> -->
     <button type="submit">업로드</button>
   </form>
-  <form id="form2" action="/api/articles/" method="put" enctype="multipart/form-data">
+
+  <form id="form2" action="/api/image" method="post" enctype="multipart/form-data">
+    <input type="file" name="image" multiple />
+    <button type="submit">이미지만 업로드</button>
+  </form>
+
+
+
+  <img src="https://rednada1708.s3.ap-northeast-2.amazonaws.com/original/1644771475237%EB%B0%95%EC%B9%98%EA%B8%B0.jfif">
+
+
+
+
+
+
+
+  <!-- <form id="form2" action="/api/articles/" method="put" enctype="multipart/form-data">
     <input type="file" name="image" />
     <input type="text" name="user_id" placeholder="user">
     <input type="text" name="title" placeholder="title">
     <input type="text" name="content" placeholder="content">
     <input type="text" name="year" placeholder="year">
-    <!-- <input type="file" name="image2" />
-    <input type="text" name="title" /> -->
     <button type="submit">수정</button>
-  </form>
+  </form> -->
 
 
   <script>
@@ -45,6 +59,3 @@
 
 
 
-
-
-<input> 

@@ -32,6 +32,10 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, '/assets/index.html'))
 })
 
+app.use((err,req,res,next)=>{
+    res.status(401).send({ result : "fail" , msg : err.message})
+})
+
 
 
 app.listen(8080, () => {
