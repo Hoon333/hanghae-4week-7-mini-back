@@ -1,43 +1,42 @@
+require('dotenv').config();
+
 const express = require("express");
-const mongoose = require("mongoose");
-const loginRouter = require("./routes/login");
-const articleRouter = require("./routes/articles");
-const commentRouter = require("./routes/comments");
+const connect = require("./schemas")
 const cors = require("cors");
 const path = require("path");
-const authMiddleware = require("./middlewares/auth-middleware");
+const app = express();
+const { port } = process.env
 
-// mongoose.connect("mongodb://localhost:27017/response2019", {
-//   ignoreUndefined: true ,
-// }); // mongodb 연결
-mongoose.connect("mongodb://localhost/responseMZ", {   // 1-6 몽고 DB연결과정 localhost의 todo-demo에 연결하겠다.
-    useNewUrlParser: true,  // 1-6 몽고 DB연결과정
-    useUnifiedTopology: true,  // 1-6 몽고 DB연결과정
-    ignoreUndefined: true,
+// Routers
+const userRouter = require("./routes/users");
+const articleRouter = require("./routes/articles");
+const commentRouter = require("./routes/comments");
+
+// 몽고 db 커넥트
+connect();
+
+app.use((req, res, next) => {
+    console.log('Request URL:', req.originalUrl, ' - ', new Date());
+    next();
 });
 
-const db = mongoose.connection; // 1-6 몽고 DB연결과정
-db.on("error", console.error.bind(console, "connection error:")); // 1-6 몽고 DB연결과정
-
-const app = express();
-
 app.use(cors());
+app.use(express.urlencoded());
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'assets')))
-app.use("/api", express.urlencoded({ extended: false }), [loginRouter, articleRouter, commentRouter]);
 
+app.use("/api", [userRouter, articleRouter, commentRouter]);
 
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, '/assets/index.html'))
 })
 
-app.use((err,req,res,next)=>{
-    res.status(401).send({ result : "fail" , msg : err.message})
+app.use((err, req, res, next) => {
+    res.status(401).send({ result: "fail2gun", msg: err.message })
 })
 
 
-
-app.listen(8080, () => {
-    console.log("서버가 요청을 받을 준비가 됐어요");
+app.listen(port, () => {
+    console.log(port, "포트로 서버가 요청 받을 준비가 됐습니다!");
 });
