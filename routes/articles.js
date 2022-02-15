@@ -11,6 +11,8 @@ const User = require("../schemas/user");
 const authMiddleware = require("../middlewares/auth-middleware");
 
 const { upload } = require("../middlewares/upload")
+
+// delete obj in S3 module
 const deleteS3 = require("../middlewares/deleteS3")
 
 // 전체 게시글 조회 API 통과
@@ -34,10 +36,9 @@ router.delete("/articles/:articleId", authMiddleware, async (req, res) => {
 	const existArticle = await Article.findOne({ _id: articleId });
 	if (existArticle) {
 		if (existArticle.user_id !== user_id) {
-			res.status(400).send({
+			return res.status(400).send({
 				errorMessage: "자기 글만 삭제할 수 있습니다.",
 			});
-			return;
 		} else {
 			await deleteS3(existArticle);
 			await Article.deleteOne({ _id: articleId });
@@ -82,16 +83,12 @@ router.post("/articles/:articleId", authMiddleware,upload.array("image", 1), asy
 	//authmiddleware 작업 끝나면 자기글만 수정가능하도록 변경 예정
 	if (existArticle) {
 		if (user_id !== existArticle.user_id) {
-			res.status(400).send({
+			return res.status(400).send({
 				result: "fail",
 				errorMessage: "자기글만 수정할 수 있습니다.",
 			});
-			return;
 		} else {
-			await Article.updateOne(
-				{ _id: articleId },
-				{ $set: { title, content, year, image } }
-			);
+			await Article.updateOne({ _id: articleId }, { $set: { title, content, year, image } });
 			console.log('게시글 수정 완료!')
 		}
 	}
