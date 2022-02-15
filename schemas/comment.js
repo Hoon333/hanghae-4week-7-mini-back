@@ -2,18 +2,25 @@ const mongoose = require("mongoose");
 const moment = require("moment");
 
 const commentSchema = new mongoose.Schema({
-    article_id: {
-        type: String,
-        require: true,
+    comment_id:{
+        type:String,
+        require:true,
+    },
+    user_id:{
+        type:String,
+        require:true,
+    },
+    article_id:{
+        type:String,
+        require:true,
     },
     content: {
         type: String,
         required: true
     },
     date: {
-        type: Date,
+        type: String,
         default: moment().format("YYYY-MM-DD hh:mm"),
-        required: true
     }
 })
 
