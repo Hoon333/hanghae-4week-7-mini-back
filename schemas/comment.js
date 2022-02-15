@@ -11,9 +11,8 @@ const commentSchema = new mongoose.Schema({
         required: true
     },
     date: {
-        type: Date,
+        type: String,
         default: moment().format("YYYY-MM-DD hh:mm"),
-        required: true
     }
 })
 
