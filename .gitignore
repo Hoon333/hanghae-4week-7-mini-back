@@ -4,6 +4,11 @@ node_modules
 ## .env
 .env
 
-
+## API 호출 test 용
 assets/
-**/test/ 
+
+
+## test code 작성
+**/test/
+
+

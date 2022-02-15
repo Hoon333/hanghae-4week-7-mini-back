@@ -3,10 +3,8 @@ require('dotenv').config();
 const express = require("express");
 const connect = require("./schemas")
 const cors = require("cors");
-const path = require("path");
 const app = express();
 const { port } = process.env
-
 
 // Routers
 const userRouter = require("./routes/users");
@@ -24,17 +22,12 @@ app.use((req, res, next) => {
 app.use(cors());
 app.use(express.urlencoded());
 app.use(express.json())
-app.use(express.static(path.join(__dirname, 'assets')))
 
 app.use("/api", [userRouter, articleRouter, commentRouter]);
 
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, '/assets/index.html'))
-})
-
 app.use((err, req, res, next) => {
-    res.status(401).send({ result: "fail2gun", msg: err.message })
+    res.status(401).send({ result: "fail", msg: err.message })
 })
 
 
