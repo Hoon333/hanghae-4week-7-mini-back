@@ -27,21 +27,6 @@ router.post("/users", async (req, res) => {
     res.status(201).send({ result: 'success', msg: '회원가입에 성공하였습니다.' });
 });
 
-// ID 중복 확인 API
-router.get("/users/:user_id", async (req, res) => {
-    const { user_id } = req.params;
-
-    const existsUsers = await User.findOne({ user_id });
-    if (existsUsers) {
-        // NOTE: 보안을 위해 인증 메세지는 자세히 설명하지 않는것을 원칙으로 한다: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#authentication-responses
-        return res.status(400).send({
-            errorMessage: "ID가 이미 사용중입니다.",
-        });
-    } else {
-        res.status(201).send({ result: 'success', msg: '사용 가능한 ID 입니다.' });
-    }
-});
-
 // 로그인 API
 router.post("/auth", async (req, res) => {
     const { user_id, password } = req.body;
