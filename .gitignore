@@ -1,3 +1,9 @@
+## node packages
 node_modules
+
+## .env
 .env
-test
+.env copy
+
+## test code
+**/test/
