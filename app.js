@@ -15,7 +15,8 @@ const commentRouter = require("./routes/comments");
 connect();
 
 app.use((req, res, next) => {
-    console.log('Request URL:', req.originalUrl, ' - ', new Date());
+    console.log('Request URL:', `[${req.method}]`, req.originalUrl, ' - ', new Date().toLocaleString())
+    console.log(req)
     next();
 });
 
