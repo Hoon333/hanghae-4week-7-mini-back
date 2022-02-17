@@ -12,3 +12,5 @@ assets/
 **/test/
 
 
+## vscode
+.vscode/
