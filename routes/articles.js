@@ -49,12 +49,11 @@ router.delete("/articles/:articleId", authMiddleware, async (req, res) => {
 
 
 // 게시글 작성
-router.post("/articles", authMiddleware, upload.single("image"), async (req, res) => {
+router.post("/articles", authMiddleware, async (req, res) => {
 	try {
 		const { user_id } = res.locals.user
-		const { title, content, year } = req.body; //여기서 user_id 지우고 res.locals에서 user_id 가져올 예정
-		const image = req.file.location;
-		console.log(user_id, title, content, year);
+		const { title, content, year, image } = req.body;
+		// const image = req.file.location;
 		const createdArticle = await Article.create({
 			user_id,
 			title,
@@ -68,6 +67,31 @@ router.post("/articles", authMiddleware, upload.single("image"), async (req, res
 		res.status(400).json({ result: "fail", msg: err });
 	}
 });
+
+
+router.post("/articles/imageUpload", authMiddleware, upload.single("image"), async (req, res) => {
+	try {
+		//const {user_id} = res.locals.user
+		//const { title, content, year } = req.body; //여기서 user_id 지우고 res.locals에서 user_id 가져올 예정
+		const image = req.file.location;
+		// const createdArticle = await Article.create({
+		// 	user_id,
+		// 	title,
+		// 	content,
+		// 	year: Number(year),
+		// 	image,
+		// });
+		res.json({ result: "success", image });
+	} catch (err) {
+		res.status(400).json({ result: "fail", msg: err });
+	}
+});
+
+
+
+
+
+
 
 // 게시글 수정 API 통과 // req.files.length =>   url 삭제, url 등록, 수정 ?
 router.post("/articles/:articleId", authMiddleware, upload.array("image", 1), async (req, res) => {
