@@ -8,7 +8,7 @@
 
 ## 🌏 Home Page
 
--   http://
+-   http://gyurine.shop.s3-website.ap-northeast-2.amazonaws.com/
 
 <br><br>
 
